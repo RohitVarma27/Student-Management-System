@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Study Plan</title>
     <style>
+        /* Your existing CSS styles */
         body {
             font-family: Arial, sans-serif;
             background-color: #f8f8f8;
@@ -71,6 +72,22 @@
         .plan p {
             margin: 5px 0;
         }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .sortable-item {
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -84,8 +101,12 @@
         <h2>Create a Study Plan</h2>
         <form id="studyPlanForm">
             <div class="form-group">
-                <label for="subject">Subject</label>
-                <input type="text" id="subject" name="subject" required>
+                <label for="numSubjects">Number of Subjects</label>
+                <input type="number" id="numSubjects" name="numSubjects" min="1" required>
+            </div>
+            <div id="subjectInputs"></div>
+            <div class="form-group">
+                <button type="button" onclick="generateSubjectInputs()">Generate Subject Inputs</button>
             </div>
             <div class="form-group">
                 <label for="startDate">Start Date</label>
@@ -111,15 +132,61 @@
             <!-- Study plans will be dynamically added here -->
         </div>
     </div>
+
+    <div class="timetable-section">
+        <h2>Study Timetable</h2>
+        <table id="timetable">
+            <thead>
+                <tr>
+                    <th>Day</th>
+                    <th>Subjects</th>
+                </tr>
+            </thead>
+            <tbody id="timetableBody" class="sortable">
+                <!-- Timetable will be dynamically generated here -->
+            </tbody>
+        </table>
+    </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sortable/1.14.0/sortable.min.js"></script>
 <script>
+    function generateSubjectInputs() {
+        const numSubjects = parseInt(document.getElementById('numSubjects').value);
+        const subjectInputsDiv = document.getElementById('subjectInputs');
+        subjectInputsDiv.innerHTML = ''; // Clear previous inputs
+
+        for (let i = 1; i <= numSubjects; i++) {
+            const inputLabel = document.createElement('label');
+            inputLabel.setAttribute('for', 'subject' + i);
+            inputLabel.textContent = 'Subject ' + i;
+
+            const inputField = document.createElement('input');
+            inputField.setAttribute('type', 'text');
+            inputField.setAttribute('id', 'subject' + i);
+            inputField.setAttribute('name', 'subject' + i);
+            inputField.setAttribute('required', 'required');
+
+            const inputDiv = document.createElement('div');
+            inputDiv.className = 'form-group';
+            inputDiv.appendChild(inputLabel);
+            inputDiv.appendChild(inputField);
+
+            subjectInputsDiv.appendChild(inputDiv);
+        }
+    }
+
     document.getElementById('studyPlanForm').addEventListener('submit', function(event) {
         event.preventDefault();
 
-        const subject = document.getElementById('subject').value;
-        const startDate = document.getElementById('startDate').value;
-        const endDate = document.getElementById('endDate').value;
+        const numSubjects = parseInt(document.getElementById('numSubjects').value);
+        let subjects = '';
+        for (let i = 1; i <= numSubjects; i++) {
+            subjects += document.getElementById('subject' + i).value + ' ';
+        }
+
+        const startDate = new Date(document.getElementById('startDate').value);
+        const endDate = new Date(document.getElementById('endDate').value);
         const details = document.getElementById('details').value;
 
         const planContainer = document.getElementById('plansContainer');
@@ -128,17 +195,53 @@
         plan.className = 'plan';
 
         plan.innerHTML = `
-            <p><strong>Subject:</strong> ${subject}</p>
-            <p><strong>Start Date:</strong> ${startDate}</p>
-            <p><strong>End Date:</strong> ${endDate}</p>
+            <p><strong>Subjects:</strong> ${subjects}</p>
+            <p><strong>Start Date:</strong> ${startDate.toDateString()}</p>
+            <p><strong>End Date:</strong> ${endDate.toDateString()}</p>
             <p><strong>Details:</strong> ${details}</p>
         `;
 
         planContainer.appendChild(plan);
 
-        document.getElementById('studyPlanForm').reset();
+        generateTimetable(startDate, endDate, subjects);
     });
+
+    function generateTimetable(startDate, endDate, subjects) {
+        const daysDifference = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1; // Adding 1 to include the end date
+        const timetableBody = document.getElementById('timetableBody');
+        timetableBody.innerHTML = ''; // Clear previous timetable
+
+        for (let i = 0; i < daysDifference; i++) {
+            const currentDate = new Date(startDate);
+            currentDate.setDate(currentDate.getDate() + i);
+            const dayOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][currentDate.getDay()];
+
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${currentDate.toDateString()} (${dayOfWeek})</td>
+                <td class="sortable"></td>
+            `;
+            timetableBody.appendChild(row);
+        }
+
+        const subjectsArray = subjects.trim().split(/\s+/); // Split subjects by whitespace
+        const timetableRows = document.querySelectorAll('#timetableBody tr');
+
+        subjectsArray.forEach(subject => {
+            const subjectRow = timetableRows[Math.floor(Math.random() * timetableRows.length)]; // Randomly select a row
+            const cell = document.createElement('div');
+            cell.className = 'sortable-item';
+            cell.textContent = subject;
+            subjectRow.querySelector('.sortable').appendChild(cell);
+        });
+
+        new Sortable(timetableBody, {
+            animation: 150,
+            ghostClass: 'sortable-ghost'
+        });
+    }
 </script>
 
 </body>
 </html>
+
