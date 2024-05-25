@@ -97,9 +97,7 @@
 
     <div class="review-section">
         <h2>Review Answers</h2>
-        <div id="reviewContent">
-           
-        </div>
+        <div id="reviewContent"></div>
         <div class="buttons">
             <button onclick="showReview()">View Review</button>
             <button id="finishQuizButton" style="display: none;" onclick="finishQuiz()">Finish Quiz</button>
@@ -108,7 +106,6 @@
 </div>
 
 <script>
-   
     const userAnswers = {
         q1: '',
         q2: [],
@@ -118,21 +115,34 @@
     document.getElementById('quizForm').addEventListener('submit', function(event) {
         event.preventDefault();
 
-        
         const q1 = document.querySelector('input[name="q1"]:checked');
         if (q1) {
             userAnswers.q1 = q1.value;
         }
 
-        
         const q2 = document.querySelectorAll('input[name="q2"]:checked');
         userAnswers.q2 = Array.from(q2).map(checkbox => checkbox.value);
 
-        
         const q3 = document.querySelector('textarea[name="q3"]').value;
         userAnswers.q3 = q3;
 
-        alert('Quiz submitted!'); 
+        alert('Quiz submitted!');
+        
+        // Calculate score (for demonstration purposes, let's assume q1 correct answer is "Paris" and q2 correct answers are "2")
+        let score = 0;
+        if (userAnswers.q1 === 'Paris') score += 50;
+        if (userAnswers.q2.includes('2') && userAnswers.q2.length === 1) score += 50;
+
+        // Display the score
+        alert('Your score: ' + score);
+
+        // Store quiz result in localStorage
+        const performanceData = JSON.parse(localStorage.getItem('performanceData')) || [];
+        performanceData.push({ topic: 'Sample Quiz', score });
+        localStorage.setItem('performanceData', JSON.stringify(performanceData));
+
+        // Display performance metrics after storing the data
+        displayPerformance();
     });
 
     function showReview() {
@@ -145,14 +155,12 @@
             <p>3. Explain the theory of relativity.</p>
             <p><strong>Answer:</strong> ${userAnswers.q3}</p>
         `;
-
-        
         document.getElementById('finishQuizButton').style.display = 'block';
     }
 
     function finishQuiz() {
         alert('Thank you for completing the quiz!');
-        
+        window.location.href = '/dashboard'; // Redirect to the dashboard
     }
 </script>
 
