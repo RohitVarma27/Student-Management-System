@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Page</title>
+    <title>User Dashboard</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,119 +11,96 @@
             margin: 0;
             padding: 0;
         }
-        .container {
-            width: 80%;
-            margin: 0 auto;
-            padding: 20px;
-        }
         .header {
+            background-color: #007BFF;
+            color: white;
+            padding: 15px 0;
             text-align: center;
-            padding: 20px 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         .header h1 {
             margin: 0;
         }
-        .quiz-section, .review-section {
+        .nav {
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+        }
+        .nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+        .nav a:hover {
+            background-color: #0056b3;
+        }
+        .container {
+            padding: 20px;
+        }
+        .section {
             background-color: #fff;
             padding: 20px;
             margin-bottom: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 5px;
         }
-        .quiz-section h2, .review-section h2 {
+        .section h2 {
             margin-top: 0;
-        }
-        .question {
-            margin-bottom: 15px;
-        }
-        .question p {
-            margin: 0 0 10px;
-        }
-        .question input[type="radio"],
-        .question input[type="checkbox"] {
-            margin-right: 10px;
-        }
-        .buttons {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .buttons button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            background-color: #007BFF;
-            color: white;
-            cursor: pointer;
-        }
-        .buttons button:hover {
-            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header">
-        <h1>Exam Preparation System</h1>
-        <p>Your go-to place for effective exam preparation</p>
-    </div>
-
-    <div class="quiz-section">
-        <h2>Attempt Quiz</h2>
-        <form id="quizForm">
-            <div class="question">
-                <p>1. What is the capital of France?</p>
-                <label><input type="radio" name="q1" value="Paris"> Paris</label>
-                <label><input type="radio" name="q1" value="London"> London</label>
-                <label><input type="radio" name="q1" value="Berlin"> Berlin</label>
-                <label><input type="radio" name="q1" value="Madrid"> Madrid</label>
-            </div>
-            <div class="question">
-                <p>2. Which of the following is a prime number?</p>
-                <label><input type="checkbox" name="q2" value="2"> 2</label>
-                <label><input type="checkbox" name="q2" value="4"> 4</label>
-                <label><input type="checkbox" name="q2" value="6"> 6</label>
-                <label><input type="checkbox" name="q2" value="9"> 9</label>
-            </div>
-            <div class="question">
-                <p>3. Explain the theory of relativity.</p>
-                <textarea name="q3" rows="4" style="width: 100%;"></textarea>
-            </div>
-            <div class="buttons">
-                <button type="submit">Submit Quiz</button>
-            </div>
-        </form>
-    </div>
-
-    <div class="review-section">
-        <h2>Review Answers</h2>
-        <div id="reviewContent">
-            <!-- Review content will be dynamically loaded here -->
-        </div>
-        <div class="buttons">
-            <button onclick="showReview()">View Review</button>
-        </div>
+<div class="header">
+    <h1>User Dashboard</h1>
+    <div class="nav">
+        <a href="#home">Home</a>
+        <a href="#profile">Profile</a>
+        <a href="#question-bank">Question Bank</a>
+        <a href="#practice-tests">Practice Tests</a>
+        <a href="#study-plans">Study Plans</a>
+        <a href="#performance">Performance</a>
+        <a href="#discussion-forums">Discussion Forums</a>
+        <a href="#logout">Logout</a>
     </div>
 </div>
 
-<script>
-    document.getElementById('quizForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-        alert('Quiz submitted!'); // Replace with actual form submission logic
-    });
-
-    function showReview() {
-        const reviewContent = document.getElementById('reviewContent');
-        reviewContent.innerHTML = `
-            <p>1. What is the capital of France?</p>
-            <p><strong>Answer:</strong> Paris</p>
-            <p>2. Which of the following is a prime number?</p>
-            <p><strong>Answer:</strong> 2</p>
-            <p>3. Explain the theory of relativity.</p>
-            <p><strong>Answer:</strong> [User's Answer]</p>
-        `;
-    }
-</script>
+<div class="container">
+    <div id="home" class="section">
+        <h2>Home</h2>
+        <p>Welcome to your dashboard. Here you can access all your study materials and track your progress.</p>
+    </div>
+    <div id="profile" class="section">
+        <h2>Profile</h2>
+        <p>Manage your profile information, update your details, and change your password.</p>
+    </div>
+    <div id="question-bank" class="section">
+        <h2>Question Bank</h2>
+        <p>Browse and practice questions categorized by subjects and topics.</p>
+    </div>
+    <div id="practice-tests" class="section">
+        <h2>Practice Tests</h2>
+        <p>Take timed and untimed practice tests to prepare for your exams.</p>
+    </div>
+    <div id="study-plans" class="section">
+        <h2>Study Plans</h2>
+        <p>Create and manage your study schedules and reminders.</p>
+    </div>
+    <div id="performance" class="section">
+        <h2>Performance</h2>
+        <p>Track your performance metrics such as scores, time taken, and areas of improvement.</p>
+    </div>
+    <div id="discussion-forums" class="section">
+        <h2>Discussion Forums</h2>
+        <p>Engage with peers in discussion boards to ask questions and share knowledge.</p>
+    </div>
+    <div id="logout" class="section">
+        <h2>Logout</h2>
+        <p>Click here to logout from your account.</p>
+    </div>
+</div>
 
 </body>
 </html>
