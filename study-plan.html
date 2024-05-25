@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Plan</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: #007BFF;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .header h1 {
+            margin: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+        .form-section, .plan-section {
+            margin-bottom: 20px;
+        }
+        .form-section h2, .plan-section h2 {
+            margin-top: 0;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="date"],
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .form-group button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+        }
+        .form-group button:hover {
+            background-color: #0056b3;
+        }
+        .plan {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+        .plan:last-child {
+            border-bottom: none;
+        }
+        .plan p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>Study Plan</h1>
+</div>
+
+<div class="container">
+    <div class="form-section">
+        <h2>Create a Study Plan</h2>
+        <form id="studyPlanForm">
+            <div class="form-group">
+                <label for="subject">Subject</label>
+                <input type="text" id="subject" name="subject" required>
+            </div>
+            <div class="form-group">
+                <label for="startDate">Start Date</label>
+                <input type="date" id="startDate" name="startDate" required>
+            </div>
+            <div class="form-group">
+                <label for="endDate">End Date</label>
+                <input type="date" id="endDate" name="endDate" required>
+            </div>
+            <div class="form-group">
+                <label for="details">Details</label>
+                <textarea id="details" name="details" rows="4" required></textarea>
+            </div>
+            <div class="form-group">
+                <button type="submit">Add Plan</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="plan-section">
+        <h2>Your Study Plans</h2>
+        <div id="plansContainer">
+            <!-- Study plans will be dynamically added here -->
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('studyPlanForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const subject = document.getElementById('subject').value;
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        const details = document.getElementById('details').value;
+
+        const planContainer = document.getElementById('plansContainer');
+
+        const plan = document.createElement('div');
+        plan.className = 'plan';
+
+        plan.innerHTML = `
+            <p><strong>Subject:</strong> ${subject}</p>
+            <p><strong>Start Date:</strong> ${startDate}</p>
+            <p><strong>End Date:</strong> ${endDate}</p>
+            <p><strong>Details:</strong> ${details}</p>
+        `;
+
+        planContainer.appendChild(plan);
+
+        document.getElementById('studyPlanForm').reset();
+    });
+</script>
+
+</body>
+</html>
