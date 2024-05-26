@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practice Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .container {
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            width: 80%;
+            max-width: 600px;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .section h2 {
+            margin-top: 0;
+        }
+        label, select, button, input {
+            display: block;
+            width: 100%;
+            margin-top: 10px;
+            padding: 5px;
+        }
+        button {
+            margin-top: 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .question {
+            margin-top: 20px;
+        }
+        .question label {
+            font-weight: bold;
+        }
+        .question select {
+            margin-top: 5px;
+        }
+        .quizzes-list {
+            margin-top: 20px;
+        }
+        .quizzes-list h3 {
+            margin-bottom: 10px;
+        }
+        .quiz-item {
+            background-color: #e8e8e8;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="section">
+        <h2>Create Practice Test</h2>
+        <form id="practiceTestForm">
+            <label for="semesterSelect">Select Semester:</label>
+            <select id="semesterSelect" required>
+                <option value="">--Select Semester--</option>
+                <option value="semester1">Semester 1</option>
+                <option value="semester2">Semester 2</option>
+                <option value="semester3">Semester 3</option>
+                <option value="semester4">Semester 4</option>
+                <option value="semester5">Semester 5</option>
+                <option value="semester6">Semester 6</option>
+                <option value="semester7">Semester 7</option>
+                <option value="semester8">Semester 8</option>
+            </select>
+            <label for="subjectSelect">Select Subject:</label>
+            <select id="subjectSelect" required>
+                <option value="">--Select Subject--</option>
+            </select>
+            <button type="button" id="addQuestionButton">Add Question</button>
+            <div id="questionsContainer"></div>
+            <button type="submit">Submit Test</button>
+        </form>
+    </div>
+    <div class="section quizzes-list" id="quizzesList">
+        <h3>Quizzes Added</h3>
+        <div id="quizzesContainer">
+            <!-- Quizzes will be dynamically added here -->
+        </div>
+    </div>
+</div>
+
+<script>
+    const semesterSelect = document.getElementById('semesterSelect');
+    const subjectSelect = document.getElementById('subjectSelect');
+    const addQuestionButton = document.getElementById('addQuestionButton');
+    const questionsContainer = document.getElementById('questionsContainer');
+    const quizzesContainer = document.getElementById('quizzesContainer');
+
+    const subjects = {
+        semester1: ['Math', 'Physics', 'VDC'],
+        semester2: ['BEEE', 'Chemistry', 'Graph Theory'],
+        semester3: ['Data Communications', 'Digital Logic Circuits', 'Data Structures and Algorithms'],
+        semester4: ['Operating Systems', 'Computer Organization and Architecture', 'Java'],
+        semester5: ['Artificial Intelligence', 'Design and Analysis of Algorithms', 'Artificial Neural Networks'],
+        semester6: ['Database Management Systems', 'Object Oriented Software Engineering', 'Web Application Development'],
+        semester7: ['Advanced Artificial Intelligence', 'Natural Language Processing', 'Project1'],
+        semester8: ['Machine Learning', 'Security in Software Engineering', 'Project2']
+    };
+
+    semesterSelect.addEventListener('change', function() {
+        const selectedSemester = this.value;
+        const subjectsArray = subjects[selectedSemester] || [];
+        subjectSelect.innerHTML = '<option value="">--Select Subject--</option>';
+        subjectsArray.forEach(subject => {
+            const option = document.createElement('option');
+            option.textContent = subject;
+            option.value = subject.toLowerCase().replace(/\s+/g, '');
+            subjectSelect.appendChild(option);
+        });
+    });
+
+    addQuestionButton.addEventListener('click', function() {
+        const questionDiv = document.createElement('div');
+        questionDiv.classList.add('question');
+        
+        const questionLabel = document.createElement('label');
+        questionLabel.textContent = 'Question:';
+        questionDiv.appendChild(questionLabel);
+        
+        const questionInput = document.createElement('input');
+        questionInput.type = 'text';
+        questionInput.required = true;
+        questionDiv.appendChild(questionInput);
+        
+        for (let i = 1; i <= 4; i++) {
+            const optionLabel = document.createElement('label');
+            optionLabel.textContent = 'Option ' + i + ':';
+            questionDiv.appendChild(optionLabel);
+            
+            const optionInput = document.createElement('input');
+            optionInput.type = 'text';
+            optionInput.required = true;
+            questionDiv.appendChild(optionInput);
+        }
+
+        const answerLabel = document.createElement('label');
+        answerLabel.textContent = 'Correct Answer:';
+        questionDiv.appendChild(answerLabel);
+        
+        const answerSelect = document.createElement('select');
+        answerSelect.required = true;
+        for (let i = 1; i <= 4; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = 'Option ' + i;
+            answerSelect.appendChild(option);
+        }
+        questionDiv.appendChild(answerSelect);
+        
+        questionsContainer.appendChild(questionDiv);
+    });
+
+    document.getElementById('practiceTestForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const semester = semesterSelect.options[semesterSelect.selectedIndex].text;
+        const subject = subjectSelect.options[subjectSelect.selectedIndex].text;
+        const questions = Array.from(document.querySelectorAll('.question')).map(questionDiv => {
+            const questionText = questionDiv.querySelector('input[type="text"]').value;
+            const options = Array.from(questionDiv.querySelectorAll('input[type="text"]')).slice(1).map(input => input.value);
+            const correctAnswer = questionDiv.querySelector('select').value;
+            return { questionText, options, correctAnswer };
+        });
+
+        const quizItem = document.createElement('div');
+        quizItem.classList.add('quiz-item');
+        
+        const quizTitle = document.createElement('h4');
+        quizTitle.textContent = `${semester} - ${subject}`;
+        quizItem.appendChild(quizTitle);
+        
+        questions.forEach((q, index) => {
+            const questionEl = document.createElement('p');
+            questionEl.textContent = `Q${index + 1}: ${q.questionText}`;
+            quizItem.appendChild(questionEl);
+
+            q.options.forEach((option, i) => {
+                const optionEl = document.createElement('p');
+                optionEl.textContent = `Option ${i + 1}: ${option}`;
+                if (i + 1 == q.correctAnswer) {
+                    optionEl.style.fontWeight = 'bold';
+                }
+                quizItem.appendChild(optionEl);
+            });
+        });
+
+        quizzesContainer.appendChild(quizItem);
+
+        // Reset form for new input
+        document.getElementById('practiceTestForm').reset();
+        questionsContainer.innerHTML = '';
+    });
+</script>
+
+</body>
+</html>
