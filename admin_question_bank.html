@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Question Bank and Learning Materials</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+        .section h2 {
+            margin-top: 0;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        select, input[type="file"] {
+            display: block;
+            margin-top: 5px;
+            width: 100%;
+            padding: 5px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="section">
+        <h2>Upload Question Bank and Learning Materials</h2>
+        <form id="uploadForm">
+            <label for="semesterSelect">Select Semester:</label>
+            <select id="semesterSelect" required>
+                <option value="">--Select Semester--</option>
+                <option value="semester1">Semester 1</option>
+                <option value="semester2">Semester 2</option>
+                <option value="semester3">Semester 3</option>
+                <option value="semester4">Semester 4</option>
+                <option value="semester5">Semester 5</option>
+                <option value="semester6">Semester 6</option>
+                <option value="semester7">Semester 7</option>
+                <option value="semester8">Semester 8</option>
+            </select>
+            <label for="subjectSelect">Select Subject:</label>
+            <select id="subjectSelect" required>
+                <option value="">--Select Subject--</option>
+            </select>
+            <label for="questionBank">Question Bank Files:</label>
+            <input type="file" id="questionBank" name="questionBank[]" multiple accept=".csv,.xlsx,.xls,.txt,.doc,.docx,.pdf">
+            <label for="learningMaterials">Learning Materials:</label>
+            <input type="file" id="learningMaterials" name="learningMaterials[]" multiple accept=".pdf,.ppt,.pptx,.doc,.docx,.txt,.zip">
+            <button type="submit">Upload Files</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    const semesterSelect = document.getElementById('semesterSelect');
+    const subjectSelect = document.getElementById('subjectSelect');
+
+    const subjects = {
+        semester1: ['Math', 'Physics', 'VDC'],
+        semester2: ['BEEE', 'Chemistry', 'Graph Theory'],
+        semester3: ['Data Communications', 'Digital Logic Circuits', 'Data Structures and Algorithms'],
+        semester4: ['Operating Systems', 'Computer Organization and Architecture', 'Java'],
+        semester5: ['Artificial Intelligence', 'Design and Analysis of Algorithms', 'Artificial Neural Networks'],
+        semester6: ['Database Management Systems', 'Object Oriented Software Engineering', 'Web Application Development'],
+        semester7: ['Advanced Artificial Intelligence', 'Natural Language Processing', 'Project1'],
+        semester8: ['Machine Learning', 'Security in Software Engineering', 'Project2']
+    };
+
+    semesterSelect.addEventListener('change', function() {
+        const selectedSemester = this.value;
+        const subjectsArray = subjects[selectedSemester] || [];
+        subjectSelect.innerHTML = '<option value="">--Select Subject--</option>';
+        subjectsArray.forEach(subject => {
+            const option = document.createElement('option');
+            option.textContent = subject;
+            option.value = subject.toLowerCase().replace(/\s+/g, '');
+            subjectSelect.appendChild(option);
+        });
+    });
+
+    document.getElementById('uploadForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        alert('Files uploaded successfully!');
+    });
+</script>
+
+</body>
+</html>
