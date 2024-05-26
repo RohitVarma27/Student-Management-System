@@ -93,11 +93,8 @@
             role
         };
 
-        // Simulate storing user data
         localStorage.setItem('userData_' + username, JSON.stringify(userData));
         alert('Registration successful');
-
-        // Redirect to the login page after registration
         window.location.href = 'login.html';
     });
 </script>
