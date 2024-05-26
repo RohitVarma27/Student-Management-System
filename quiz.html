@@ -154,7 +154,6 @@
                 correctAnswer: "Red, Yellow, Blue"
             }
         ]
-        // Add more quizzes for each subject as needed
     };
 
     const semesterSelect = document.getElementById("semester-select");
@@ -163,7 +162,6 @@
     const quizReview = document.getElementById("quiz-review");
     const quizForm = document.getElementById("quiz-form");
 
-    // Populate subject options based on selected semester
     semesterSelect.addEventListener("change", () => {
         const selectedSemester = semesterSelect.value;
         subjectSelect.innerHTML = "<option value='' disabled selected>Select Subject</option>";
@@ -175,7 +173,6 @@
         });
     });
 
-    // Display quiz questions based on selected subject
     subjectSelect.addEventListener("change", () => {
         const selectedSubject = subjectSelect.value;
         quizContainer.innerHTML = "";
