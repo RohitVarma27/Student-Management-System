@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Tracker</title>
+    <!-- Include Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
+        }
+        .info-box, canvas {
+            flex: 1 1 200px;
+            max-width: 300px;
+            text-align: center;
+        }
+        canvas {
+            max-height: 300px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        h2 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Performance Tracker</h1>
+    <div class="container">
+        <div class="info-box">
+            <h2>Quizzes Completed</h2>
+            <p id="quizzesCompleted">Loading...</p>
+        </div>
+        <div class="info-box">
+            <h2>Topics Completed</h2>
+            <p id="topicsCompleted">Loading...</p>
+        </div>
+        <div class="info-box">
+            <h2>Days Left</h2>
+            <p id="daysLeft">Loading...</p>
+        </div>
+        <div class="info-box">
+            <h2>Chapters Left</h2>
+            <p id="chaptersLeft">Loading...</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <canvas id="quizzesChart"></canvas>
+        <canvas id="topicsChart"></canvas>
+        <canvas id="daysChart"></canvas>
+        <canvas id="chaptersChart"></canvas>
+    </div>
+
+    <script>
+        // Dummy data (replace with actual data)
+        const data = {
+            quizzesCompleted: 10,
+            topicsCompleted: 5,
+            daysLeft: 30,
+            chaptersLeft: 15
+        };
+
+        // Display data
+        document.getElementById('quizzesCompleted').innerText = data.quizzesCompleted;
+        document.getElementById('topicsCompleted').innerText = data.topicsCompleted;
+        document.getElementById('daysLeft').innerText = data.daysLeft;
+        document.getElementById('chaptersLeft').innerText = data.chaptersLeft;
+
+        // Graphs
+        const quizzesChart = new Chart(document.getElementById('quizzesChart').getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Completed', 'Remaining'],
+                datasets: [{
+                    data: [data.quizzesCompleted, 10 - data.quizzesCompleted],
+                    backgroundColor: ['#36a2eb', '#ff6384']
+                }]
+            }
+        });
+
+        const topicsChart = new Chart(document.getElementById('topicsChart').getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Completed', 'Remaining'],
+                datasets: [{
+                    data: [data.topicsCompleted, 10 - data.topicsCompleted],
+                    backgroundColor: ['#ffcd56', '#ff6384']
+                }]
+            }
+        });
+
+        const daysChart = new Chart(document.getElementById('daysChart').getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Days Passed', 'Days Left'],
+                datasets: [{
+                    data: [0, data.daysLeft],
+                    backgroundColor: ['#4bc0c0', '#ff6384']
+                }]
+            }
+        });
+
+        const chaptersChart = new Chart(document.getElementById('chaptersChart').getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Completed', 'Remaining'],
+                datasets: [{
+                    data: [0, data.chaptersLeft],
+                    backgroundColor: ['#9966ff', '#ff6384']
+                }]
+            }
+        });
+    </script>
+</body>
+</html>
