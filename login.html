@@ -65,14 +65,25 @@
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
 
+        console.log('Username:', username);
+        console.log('Password:', password);
+
         const storedUserData = localStorage.getItem('userData_' + username);
+        console.log('Stored User Data:', storedUserData);
+
         if (storedUserData) {
             const userData = JSON.parse(storedUserData);
+            console.log('User Data:', userData);
+
             if (userData.password === password) {
                 if (userData.role === 'admin') {
+                    console.log('Redirecting to admin dashboard');
                     window.location.href = 'admin-dashboard.html';
-                } else {
+                } else if (userData.role === 'user') {
+                    console.log('Redirecting to user dashboard');
                     window.location.href = 'user-dasboard.html';
+                } else {
+                    alert('Unknown role');
                 }
             } else {
                 alert('Invalid password');
