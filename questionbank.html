@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: #007BFF;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .header h1 {
+            margin: 0;
+        }
+        .nav {
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+        }
+        .nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+        .nav a:hover {
+            background-color: #0056b3;
+        }
+        .container {
+            padding: 20px;
+        }
+        .section {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            display: none;
+        }
+        .section.active {
+            display: block; 
+        }
+        .section h2 {
+            margin-top: 0;
+        }
+        .qa {
+            margin-bottom: 20px;
+        }
+        .qa p {
+            margin: 5px 0;
+        }
+        .qa .question {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+
+    <div class="nav">
+       
+        <a href="#question-bank">Click here to choose semester</a>
+
+    </div>
+</div>
+
+<div class="container">
+    <div id="question-bank" class="section">
+        <h2>Question Bank</h2>
+        <div>
+            <label for="semester-select">Select Semester:</label>
+            <select id="semester-select">
+                <option value="">--Select Semester--</option>
+                <option value="semester1">Semester 1</option>
+                <option value="semester2">Semester 2</option>
+                <option value="semester3">Semester 3</option>
+                <option value="semester4">Semester 4</option>
+                <option value="semester5">Semester 5</option>
+                <option value="semester6">Semester 6</option>
+                <option value="semester7">Semester 7</option>
+                <option value="semester8">Semester 8</option>
+            </select>
+        </div>
+        <div id="subject-container" style="display:none;">
+            <label for="subject-select">Select Subject:</label>
+            <select id="subject-select">
+                <option value="">--Select Subject--</option>
+                
+            </select>
+        </div>
+        <div id="questions-container" style="display:none;">
+            <h3>Questions</h3>
+            <div id="questions-list">
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    
+    const navLinks = document.querySelectorAll('.nav a');
+  
+    const sections = document.querySelectorAll('.section');
+
+
+    function handleNavClick(event) {
+      
+        event.preventDefault();
+       
+        const targetId = this.getAttribute('href').substring(1);
+   
+        sections.forEach(section => {
+            section.classList.remove('active');
+        });
+   
+        document.getElementById(targetId).classList.add('active');
+    }
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', handleNavClick);
+    });
+
+
+    function displayUserDetails() {
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        if (userData) {
+            const profileDetails = document.getElementById('profile-details');
+            profileDetails.innerHTML = `
+                <p><strong>Username:</strong> ${userData.username}</p>
+                <p><strong>Email:</strong> ${userData.email}</p>
+                <p><strong>Role:</strong> ${userData.role}</p>
+            `;
+        }
+    }
+
+
+    displayUserDetails();
+
+
+    const semesterSelect = document.getElementById('semester-select');
+    const subjectSelect = document.getElementById('subject-select');
+    const subjectContainer = document.getElementById('subject-container');
+    const questionsContainer = document.getElementById('questions-container');
+    const questionsList = document.getElementById('questions-list');
+
+    const subjects = {
+        semester1: ['Math', 'Physics', 'VDC'],
+        semester2: ['BEEE', 'Chemistry', 'Graph Theory'],
+        semester3: ['Data Communications', 'Digital Logic Circuits', 'Data Structures and Algorithms'],
+        semester4: ['Operating Systems', 'Computer Organization and Architecture', 'Java'],
+        semester5: ['Artificial Intelligence', 'Design and Analysis of Algorithms', 'Artificial Neural Networks'],
+        semester6: ['Database Management Systems', 'Object Oriented Software Engineering', 'Web Application Development'],
+        semester7: ['Advanced Artificial Intelligence', 'Natural Language Processing', 'Project1'],
+        semester8: ['Machine Learning', 'Security in Software Engineering', 'Project2']
+    };
+
+    const qaBank = {
+    'Math': [
+        { q: 'What is 2 + 2?', a: '2 + 2 equals 4.' },
+        { q: 'Define calculus.', a: 'Calculus is the mathematical study of continuous change.' },
+        { q: 'What is a derivative?', a: 'A derivative represents an infinitesimal change in a function with respect to one of its variables.' },
+        { q: 'What is an integral?', a: 'An integral assigns numbers to functions in a way that can describe displacement, area, volume, and other concepts.' },
+        { q: 'Explain the Fundamental Theorem of Calculus.', a: 'It links the concept of the derivative of a function with the concept of an integral.' }
+    ],
+    'Physics': [
+        { q: 'Explain Newton\'s laws.', a: 'Newton\'s laws describe the relationship between a body and the forces acting upon it, and its motion in response to those forces.' },
+        { q: 'What is the speed of light?', a: 'The speed of light in a vacuum is approximately 299,792 kilometers per second.'},
+        { q: 'Define work in physics.', a: 'Work is the energy transferred to or from an object via the application of force along a displacement.' },
+        { q: 'What is kinetic energy?', a: 'Kinetic energy is the energy that an object possesses due to its motion.' },
+        { q: 'What is potential energy?', a: 'Potential energy is the energy held by an object because of its position relative to other objects.' }
+    ],
+    'VDC': [
+        { q: 'What does VDC stand for?', a: 'VDC stands for Virtual Design and Construction.' },
+        { q: 'What is the purpose of VDC?', a: 'VDC aims to improve project efficiency through digital modeling.' },
+        { q: 'Explain BIM.', a: 'Building Information Modeling (BIM) is a process involving the generation and management of digital representations of physical and functional characteristics of places.' },
+        { q: 'What is a digital twin?', a: 'A digital twin is a virtual replica of a physical entity, used to simulate and predict performance.' },
+        { q: 'What are the benefits of VDC?', a: 'Benefits include improved visualization, better collaboration, and reduced costs.' }
+    ],
+    'BEEE': [
+        { q: 'What does BEEE stand for?', a: 'BEEE stands for Basic Electrical and Electronics Engineering.' },
+        { q: 'What is Ohm\'s Law?', a: 'Ohm\'s Law states that the current through a conductor between two points is directly proportional to the voltage across the two points.' },
+        { q: 'Define a resistor.', a: 'A resistor is a passive electrical component that implements electrical resistance as a circuit element.' },
+        { q: 'What is a diode?', a: 'A diode is a semiconductor device that allows current to flow in one direction only.' },
+        { q: 'What is an inductor?', a: 'An inductor is a passive electrical component that stores energy in a magnetic field when electric current flows through it.' }
+    ],
+    'Chemistry': [
+        { q: 'What is the periodic table?', a: 'The periodic table is a tabular arrangement of the chemical elements, ordered by their atomic number, electron configuration, and recurring properties.' },
+        { q: 'Explain covalent bonding.', a: 'Covalent bonding is a chemical bond that involves the sharing of electron pairs between atoms.' },
+        { q: 'What is an acid?', a: 'An acid is a molecule or ion capable of donating a proton (H+), or, alternatively, forming a covalent bond with an electron pair.' },
+        { q: 'Define a base.', a: 'A base is a substance that can accept hydrogen ions (protons) or more generally, donate electron pairs.' },
+        { q: 'What is a chemical reaction?', a: 'A chemical reaction is a process that leads to the transformation of one set of chemical substances to another.' }
+    ],
+    'Graph Theory': [
+        { q: 'What is a graph in graph theory?', a: 'A graph is a collection of nodes, called vertices, and the connections between them, called edges.' },
+        { q: 'Define a directed graph.', a: 'A directed graph is a graph in which the edges have a direction, indicating the flow from one vertex to another.' },
+        { q: 'What is an undirected graph?', a: 'An undirected graph is a graph in which the edges have no direction, allowing for a two-way relationship between vertices.' },
+        { q: 'Explain a weighted graph.', a: 'A weighted graph is a graph in which each edge has a numerical value, or weight, associated with it.' },
+        { q: 'What is a path in a graph?', a: 'A path is a sequence of vertices in which each adjacent pair is connected by an edge.' }
+    ],
+    'Data Communications': [
+        { q: 'What is data communication?', a: 'Data communication refers to the exchange of data between devices through some form of transmission medium such as a wire cable.' },
+        { q: 'Explain TCP/IP model.', a: 'The TCP/IP model is a set of protocols developed to allow cooperating computers to share resources across a network.' },
+        { q: 'What is a network topology?', a: 'Network topology refers to the arrangement of different elements (links, nodes, etc.) in a computer network.' },
+        { q: 'Define bandwidth.', a: 'Bandwidth is the maximum rate of data transfer across a given path.' },
+        { q: 'What is latency?', a: 'Latency is the delay before a transfer of data begins following an instruction for its transfer.' }
+    ],
+    'Digital Logic Circuits': [
+        { q: 'What is a logic gate?', a: 'A logic gate is a basic building block of a digital circuit that operates on one or more binary inputs to produce a single binary output.' },
+        { q: 'Explain the function of an AND gate.', a: 'An AND gate produces a high output (1) only if all its inputs are high (1).' },
+        { q: 'What is a flip-flop?', a: 'A flip-flop is a circuit that has two stable states and can be used to store state information.' },
+        { q: 'Define a multiplexer.', a: 'A multiplexer is a device that combines several input signals into one output signal in a digital circuit.' },
+        { q: 'What is a demultiplexer?', a: 'A demultiplexer is a device that takes a single input signal and selects one of many data-output-lines, which is connected to the single input.' }
+    ],
+    'Data Structures and Algorithms': [
+        { q: 'What is a data structure?', a: 'A data structure is a particular way of organizing data in a computer so that it can be used effectively.' },
+        { q: 'Explain the concept of an algorithm.', a: 'An algorithm is a step-by-step procedure or formula for solving a problem.' },
+        { q: 'What is a linked list?', a: 'A linked list is a linear data structure in which elements are not stored at contiguous memory locations and are linked using pointers.' },
+        { q: 'Define a binary tree.', a: 'A binary tree is a tree data structure in which each node has at most two children, referred to as the left child and the right child.' },
+        { q: 'What is a stack?', a: 'A stack is a linear data structure that follows the Last In, First Out (LIFO) principle.' }
+    ],
+    'Operating Systems': [
+        { q: 'What is an operating system?', a: 'An operating system is system software that manages computer hardware, software resources, and provides common services for computer programs.' },
+        { q: 'Define process scheduling.', a: 'Process scheduling is the activity of the process manager that handles the removal of the running process from the CPU and the selection of another process based on a particular strategy.' },
+        { q: 'What is a deadlock?', a: 'A deadlock is a situation in which two or more competing actions are waiting for the other to finish, and thus neither ever does.' },
+        { q: 'Explain virtual memory.', a: 'Virtual memory is a memory management capability of an OS that uses hardware and software to allow a computer to compensate for physical memory shortages, temporarily transferring data from random access memory to disk storage.' },
+        { q: 'What is a file system?', a: 'A file system is a method and data structure that the operating system uses to control how data is stored and retrieved.' }
+    ],
+    'Computer Organization and Architecture': [
+        { q: 'What is computer architecture?', a: 'Computer architecture is a set of rules and methods that describe the functionality, organization, and implementation of computer systems.' },
+        { q: 'Define CPU.', a: 'The Central Processing Unit (CPU) is the primary component of a computer that performs most of the processing inside a computer.' },
+        { q: 'What is a cache memory?', a: 'Cache memory is a small-sized type of volatile computer memory that provides high-speed data access to the processor and improves its efficiency.' },
+        { q: 'Explain pipelining.', a: 'Pipelining is a technique where multiple instruction phases are overlapped to improve performance.' },
+        { q: 'What is a microprocessor?', a: 'A microprocessor is a computer processor that incorporates the functions of a central processing unit on a single integrated circuit (IC).' }
+    ],
+    'Java': [
+        { q: 'What is Java?', a: 'Java is a high-level, class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible.' },
+        { q: 'Explain JVM.', a: 'The Java Virtual Machine (JVM) is a virtual machine that enables a computer to run Java programs.' },
+        { q: 'What is inheritance in Java?', a: 'Inheritance in Java is a mechanism wherein a new class is derived from an existing class.' },
+        { q: 'Define polymorphism.', a: 'Polymorphism in Java is the ability of an object to take on many forms.' },
+        { q: 'What is encapsulation?', a: 'Encapsulation is the technique of making the fields in a class private and providing access to the fields via public methods.' }
+    ],
+    'Artificial Intelligence': [
+        { q: 'What is Artificial Intelligence?', a: 'Artificial Intelligence (AI) is the simulation of human intelligence in machines that are programmed to think and learn.' },
+        { q: 'Explain machine learning.', a: 'Machine learning is a subset of AI that involves the use of algorithms and statistical models to enable a computer to improve its performance on a specific task through experience.' },
+        { q: 'What is a neural network?', a: 'A neural network is a series of algorithms that attempt to recognize underlying relationships in a set of data through a process that mimics the way the human brain operates.' },
+        { q: 'Define natural language processing.', a: 'Natural language processing (NLP) is a field of AI that focuses on the interaction between computers and humans through natural language.' },
+        { q: 'What is computer vision?', a: 'Computer vision is a field of AI that trains computers to interpret and understand the visual world.' }
+    ],
+    'Design and Analysis of Algorithms': [
+        { q: 'What is algorithm analysis?', a: 'Algorithm analysis is the process of determining the computational complexity of algorithms, that is, the amount of time, storage, or other resources needed to execute them.' },
+        { q: 'Define Big O notation.', a: 'Big O notation is a mathematical notation used to describe the upper bound of an algorithm\'s running time.' },
+        { q: 'What is a sorting algorithm?', a: 'A sorting algorithm is an algorithm that puts elements of a list in a certain order.' },
+        { q: 'Explain divide and conquer strategy.', a: 'Divide and conquer is an algorithm design paradigm based on multi-branched recursion.' },
+        { q: 'What is dynamic programming?', a: 'Dynamic programming is a method for solving complex problems by breaking them down into simpler subproblems and solving each subproblem only once, storing the solutions.' }
+    ],
+    'Artificial Neural Networks': [
+        { q: 'What is an artificial neural network?', a: 'An artificial neural network (ANN) is a computing system inspired by the biological neural networks that constitute animal brains.' },
+        { q: 'Explain the concept of a neuron in ANN.', a: 'A neuron in an ANN is a computational unit that receives input, processes it, and passes it as output to the next layer of neurons.' },
+        { q: 'What is a perceptron?', a: 'A perceptron is the simplest type of artificial neural network, which is a linear classifier used in supervised learning.' },
+        { q: 'Define backpropagation.', a: 'Backpropagation is a training algorithm for ANNs that calculates the gradient of the loss function with respect to each weight by the chain rule, updating the weights to minimize the error.' },
+        { q: 'What is a feedforward neural network?', a: 'A feedforward neural network is a type of ANN where the connections between the nodes do not form a cycle, and information moves in only one direction—from input nodes, through hidden nodes (if any), to output nodes.' }
+    ],
+    'Database Management Systems': [
+        { q: 'What is a Database Management System (DBMS)?', a: 'A DBMS is software that uses a standard method of cataloging, retrieving, and running queries on data.' },
+        { q: 'Define SQL.', a: 'SQL (Structured Query Language) is a standard programming language for managing and manipulating databases.' },
+        { q: 'What is normalization?', a: 'Normalization is the process of organizing data in a database to avoid data redundancy and improve data integrity.' },
+        { q: 'Explain the concept of a primary key.', a: 'A primary key is a unique identifier for a record in a database table.' },
+        { q: 'What is a foreign key?', a: 'A foreign key is a field (or collection of fields) in one table that uniquely identifies a row of another table.' }
+    ],
+    'Object Oriented Software Engineering': [
+        { q: 'What is object-oriented programming?', a: 'Object-oriented programming (OOP) is a programming paradigm based on the concept of objects, which can contain data and code to manipulate the data.' },
+        { q: 'Define a class in OOP.', a: 'A class in OOP is a blueprint for creating objects, providing initial values for state (member variables) and implementations of behavior (member functions or methods).' },
+        { q: 'What is inheritance in OOP?', a: 'Inheritance is a mechanism in which one class acquires the properties and behaviors (methods) of another class.' },
+        { q: 'Explain polymorphism in OOP.', a: 'Polymorphism is the ability of different objects to respond to the same function call in different ways.' },
+        { q: 'What is encapsulation?', a: 'Encapsulation is the bundling of data, along with methods that operate on that data, into a single unit or class.' }
+    ],
+    'Web Application Development': [
+        { q: 'What is a web application?', a: 'A web application is an application software that runs on a web server, rather than being installed on the local computer.' },
+        { q: 'Explain the MVC architecture.', a: 'The MVC (Model-View-Controller) architecture is a software design pattern that separates an application into three main logical components: the model, the view, and the controller.' },
+        { q: 'What is HTML?', a: 'HTML (HyperText Markup Language) is the standard markup language for creating web pages.' },
+        { q: 'Define CSS.', a: 'CSS (Cascading Style Sheets) is a style sheet language used for describing the presentation of a document written in HTML or XML.' },
+        { q: 'What is JavaScript?', a: 'JavaScript is a programming language commonly used to create interactive effects within web browsers.' }
+    ],
+    'Advanced Artificial Intelligence': [
+        { q: 'What is advanced AI?', a: 'Advanced AI refers to cutting-edge research and applications in AI that push the boundaries of what machines can do.' },
+        { q: 'Explain reinforcement learning.', a: 'Reinforcement learning is a type of machine learning where an agent learns to make decisions by taking actions in an environment to maximize some notion of cumulative reward.' },
+        { q: 'What is deep learning?', a: 'Deep learning is a subset of machine learning where artificial neural networks, algorithms inspired by the human brain, learn from large amounts of data.' },
+        { q: 'Define generative adversarial networks (GANs).', a: 'GANs are a class of machine learning frameworks where two neural networks contest with each other in a game.' },
+        { q: 'What is transfer learning?', a: 'Transfer learning is a machine learning technique where a model developed for a particular task is reused as the starting point for a model on a second task.' }
+    ],
+    'Natural Language Processing': [
+        { q: 'What is Natural Language Processing (NLP)?', a: 'NLP is a field of AI that focuses on the interaction between computers and humans through natural language.' },
+        { q: 'Define tokenization in NLP.', a: 'Tokenization is the process of breaking down a text paragraph into smaller chunks such as words or sentences.' },
+        { q: 'What is sentiment analysis?', a: 'Sentiment analysis is the process of using NLP to determine the emotional tone behind words, used to gain an understanding of the attitudes, opinions, and emotions expressed within an online mention.' },
+        { q: 'Explain named entity recognition (NER).', a: 'NER is a sub-task of information extraction that seeks to locate and classify named entities mentioned in unstructured text into predefined categories such as the names of persons, organizations, locations, expressions of times, quantities, monetary values, percentages, etc.' },
+        { q: 'What is part-of-speech tagging?', a: 'Part-of-speech tagging is the process of marking up a word in a text as corresponding to a particular part of speech, based on both its definition and its context.' }
+    ],
+    'Project1': [
+        { q: 'What is the goal of Project1?', a: 'The goal of Project1 is to apply learned concepts to a real-world problem and develop a solution using the acquired skills and knowledge.' },
+        { q: 'Define project scope.', a: 'Project scope involves identifying and documenting a list of specific project goals, deliverables, tasks, costs, and deadlines.' },
+        { q: 'What is a project timeline?', a: 'A project timeline is a visual list of tasks or activities placed in chronological order.' },
+        { q: 'Explain the importance of documentation in a project.', a: 'Documentation provides a detailed description of the project’s processes, methodology, and guidelines, ensuring clarity and consistency throughout the project lifecycle.' },
+        { q: 'What is project evaluation?', a: 'Project evaluation is a systematic and objective assessment of an ongoing or completed project, its design, implementation, and results.' }
+    ],
+    'Machine Learning': [
+        { q: 'What is machine learning?', a: 'Machine learning is a branch of AI that enables a system to learn from data rather than through explicit programming.' },
+        { q: 'Define supervised learning.', a: 'Supervised learning is a type of machine learning where the model is trained on labeled data.' },
+        { q: 'What is unsupervised learning?', a: 'Unsupervised learning is a type of machine learning where the model is trained on unlabeled data and must find hidden patterns or intrinsic structures in the input data.' },
+        { q: 'Explain the concept of a neural network.', a: 'A neural network is a series of algorithms that attempt to recognize underlying relationships in a set of data through a process that mimics the way the human brain operates.' },
+        { q: 'What is a decision tree?', a: 'A decision tree is a model used to go from observations about an item to conclusions about the item’s target value.' }
+    ],
+    'Security in Software Engineering': [
+        { q: 'What is software security?', a: 'Software security is the idea of engineering software so that it continues to function correctly under malicious attack.' },
+        { q: 'Define encryption.', a: 'Encryption is the process of converting information or data into a code, especially to prevent unauthorized access.' },
+        { q: 'What is a vulnerability in software?', a: 'A vulnerability is a weakness in software that can be exploited to cause harm or unauthorized actions within a system.' },
+        { q: 'Explain the concept of a firewall.', a: 'A firewall is a network security system that monitors and controls incoming and outgoing network traffic based on predetermined security rules.' },
+        { q: 'What is two-factor authentication?', a: 'Two-factor authentication is a security process in which the user provides two different authentication factors to verify themselves.' }
+    ],
+    'Project2': [
+        { q: 'What is the goal of Project2?', a: 'The goal of Project2 is to develop a comprehensive solution to a complex problem, integrating advanced concepts and methodologies learned throughout the course.' },
+        { q: 'Define project milestones.', a: 'Project milestones are specific points in time within a project lifecycle used to measure the progress toward the ultimate goal.' },
+        { q: 'What is risk management in a project?', a: 'Risk management is the process of identifying, assessing, and controlling threats to a project’s capital and earnings.' },
+        { q: 'Explain the role of a project manager.', a: 'A project manager is responsible for planning, executing, and closing projects, ensuring the project’s objectives are met within the constraints of time, budget, and quality.' },
+        { q: 'What is a project deliverable?', a: 'A project deliverable is any tangible or intangible output produced as a result of a project that is intended to be delivered to a customer.' }
+    ]
+};         
+       
+    semesterSelect.addEventListener('change', function() {
+        const selectedSemester = this.value;
+        if (selectedSemester) {
+            subjectSelect.innerHTML = '<option value="">--Select Subject--</option>';
+            subjects[selectedSemester].forEach(subject => {
+                const option = document.createElement('option');
+                option.value = subject;
+                option.textContent = subject;
+                subjectSelect.appendChild(option);
+            });
+            subjectContainer.style.display = 'block';
+            questionsContainer.style.display = 'none';
+        } else {
+            subjectContainer.style.display = 'none';
+            questionsContainer.style.display = 'none';
+        }
+    });
+
+    subjectSelect.addEventListener('change', function() {
+        const selectedSubject = this.value;
+        if (selectedSubject) {
+            questionsList.innerHTML = '';
+            qaBank[selectedSubject].forEach(qa => {
+                const div = document.createElement('div');
+                div.classList.add('qa');
+                const question = document.createElement('p');
+                question.classList.add('question');
+                question.textContent = 'Q: ' + qa.q;
+                const answer = document.createElement('p');
+                answer.classList.add('answer');
+                answer.textContent = 'A: ' + qa.a;
+                div.appendChild(question);
+                div.appendChild(answer);
+                questionsList.appendChild(div);
+            });
+            questionsContainer.style.display = 'block';
+        } else {
+            questionsContainer.style.display = 'none';
+        }
+    });
+</script>
+
+</body>
+</html>
