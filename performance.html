@@ -69,7 +69,6 @@
     </div>
 
     <script>
-        // Dummy data (replace with actual data)
         const data = {
             quizzesCompleted: 10,
             topicsCompleted: 5,
@@ -77,13 +76,11 @@
             chaptersLeft: 15
         };
 
-        // Display data
         document.getElementById('quizzesCompleted').innerText = data.quizzesCompleted;
         document.getElementById('topicsCompleted').innerText = data.topicsCompleted;
         document.getElementById('daysLeft').innerText = data.daysLeft;
         document.getElementById('chaptersLeft').innerText = data.chaptersLeft;
 
-        // Graphs
         const quizzesChart = new Chart(document.getElementById('quizzesChart').getContext('2d'), {
             type: 'doughnut',
             data: {
