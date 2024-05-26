@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: #007BFF;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .header h1 {
+            margin: 0;
+        }
+        .container {
+            padding: 20px;
+        }
+        .faq {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+        .faq h2 {
+            margin-top: 0;
+        }
+        .question {
+            cursor: pointer;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .question:hover {
+            background-color: #e0e0e0;
+        }
+        .answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .answer.active {
+            max-height: 1000px; /* Adjust as needed */
+            transition: max-height 1s ease;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>FAQ</h1>
+</div>
+
+<div class="container">
+    <div class="faq">
+        <h2>Frequently Asked Questions</h2>
+        <div class="question">
+            <p><strong>Q: How can I access the practice quizzes?</strong></p>
+            <div class="answer">
+                <p><strong>A:</strong> Practice quizzes are available for registered users. Simply log in to your account and navigate to the "Practice Quizzes" section to access quizzes based on your selected subjects and topics.</p>
+            </div>
+        </div>
+        <div class="question">
+            <p><strong>Can I create custom study plans?</strong></p>
+            <div class="answer">
+                <p><strong>A:</strong> Yes, our platform allows you to create personalized study plans tailored to your specific needs and goals. You can select the subjects, topics, and study duration according to your preferences.</p>
+            </div>
+        </div>
+        <div class="question">
+            <p><strong>How do I track my performance on the platform?</strong></p>
+            <div class="answer">
+                <p><strong>A:</strong> Your performance metrics, including quiz scores, study progress, and time spent on each topic, are tracked automatically. You can view detailed performance reports in your dashboard to monitor your progress.</p>
+            </div>
+        </div>
+        <div class="question">
+            <p><strong>Are the questions in the question bank updated regularly?</strong></p>
+            <div class="answer">
+                <p><strong>A:</strong> Yes, we regularly update our question bank with new questions and revisions to ensure relevance and accuracy. Our team of experts continuously reviews and enhances the question database.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const questions = document.querySelectorAll('.question');
+
+    questions.forEach(question => {
+        question.addEventListener('click', () => {
+            const answer = question.querySelector('.answer');
+            const activeAnswer = document.querySelector('.answer.active');
+
+            if (activeAnswer && activeAnswer !== answer) {
+                activeAnswer.classList.remove('active');
+            }
+
+            if (answer) {
+                answer.classList.toggle('active');
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
